@@ -19,7 +19,7 @@ def main():
         line = last_line_of_log(file)
         if 'WARN: connect() failed with: Connection refused' in line:
             notification(line)
-        time.sleep(10)
+        time.sleep(60)
     
 
 if __name__ == "__main__":
