@@ -55,6 +55,8 @@ def powercycle_node_host():
                 time.sleep(interval)
             logger.info(f"powercycle success {NODE_HOST} is up")
             notification(f"powercycle success {NODE_HOST} is up")
+            # delay to allow node and farmer to restart on node host
+            time.sleep(120)
             return True
     logger.info("mmx_node switch failed to turn on or off")
     notification("mmx_node switch failed to on or turn off")
