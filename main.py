@@ -5,7 +5,7 @@ import subprocess
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
+
 
 def last_line_of_log(filename):
     with open(filename, 'r') as file:
@@ -32,11 +32,13 @@ def main():
         if 'WARN:' in line:
             print(line)
             notification(line)
+            print(f'node = {os.getenv('NODE_HOST')}')
             is_node_host_up(os.getenv('NODE_HOST'))
         time.sleep(10)
     
 
 if __name__ == "__main__":
-   main() 
+    load_dotenv()
+    main() 
 
   
