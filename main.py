@@ -8,9 +8,13 @@ import os
 
 
 def last_line_of_log(filename):
-    with open(filename, 'r') as file:
-        lines = file.readlines()
-    return lines[-2].strip()
+    try:
+        with open(filename, 'r') as file:
+            lines = file.readlines()
+            line =lines[-2].strip() 
+            return line
+    except (OSError, IndexError) as e:
+        return ""
 
 def current_log_name():
     current_date = date.today()
@@ -29,7 +33,8 @@ def main():
     while True:
         log_file = current_log_name()
         log_directory = os.getenv('LOG_DIR')
-        line = last_line_of_log(f'{log_directory}{log_file}')
+        log_file_path = os.path.join(log_directory, log_file)
+        line = last_line_of_log(log_file_path)
         if 'WARN:' in line:
             notification(line)
             is_node_host_up(os.getenv('NODE_HOST'))
