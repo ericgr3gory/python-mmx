@@ -7,11 +7,6 @@ import os
 from home_assisstant import mmx_switch
 import logging
 
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
-
-
 def last_line_of_log(filename):
     try:
         with open(filename, "rb") as mmx_log:
