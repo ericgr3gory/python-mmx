@@ -4,6 +4,7 @@ from notify import notification
 from ping3 import ping
 from dotenv import load_dotenv
 import os
+
 load_dotenv()
 
 def last_line_of_log(filename):
