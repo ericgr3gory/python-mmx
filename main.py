@@ -36,6 +36,9 @@ def is_node_host_up(host):
         return False
     
 def powercycle_node_host():
+    logger.info("attempting to powercycle in 45 seconds")
+    notification("attempting to powercycle in 45 seconds")
+    time.sleep(45)
     if mmx_switch('turn_off'):
         logger.info('mmx_switch off')
         time.sleep(3)
