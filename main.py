@@ -36,26 +36,38 @@ def is_node_host_up(host):
         notification(f"{host} is down")
         return False
     
-
+def powercycle_node_host():
+    if mmx_switch('turn_off'):
+        time.sleep(3)
+        if mmx_switch('turn_on'):
+            timeout = 360  # Timeout period in seconds (e.g., 5 minutes)
+            interval = 5  # Interval between checks in seconds
+            start_time = time.time()
+            while not is_node_host_up(NODE_HOST):
+                if time.time() - start_time > timeout:
+                    print("Timeout: Node host did not come up within the expected time.")
+                    return False
+                time.sleep(interval)
+            return True
+    return False
         
 def main():
+    log_directory = os.getenv('LOG_DIR')
+    
     while True:
         log_file = current_log_name()
-        log_directory = os.getenv('LOG_DIR')
         log_file_path = os.path.join(log_directory, log_file)
         line = last_line_of_log(log_file_path)
         if 'WARN:' in line:
             notification(line)
-            if not is_node_host_up(os.getenv('NODE_HOST')):
-                mmx_switch('turn_off')
-                time.sleep(3)
-                mmx_switch('turn_on')
-                time.sleep(360)
+            if not is_node_host_up(NODE_HOST):
+                powercycle_node_host()
         time.sleep(10)
     
 
 if __name__ == "__main__":
     load_dotenv()
+    NODE_HOST = os.getenv('NODE_HOST')
     main() 
 
   
