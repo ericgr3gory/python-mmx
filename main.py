@@ -9,13 +9,18 @@ import os
 
 def last_line_of_log(filename):
     try:
-        with open(filename, 'r') as file:
-            lines = file.readlines()
-            line =lines[-2].strip() 
-            return line
-    except (OSError, IndexError) as e:
-        return ""
+        with open(filename, "rb") as log:
+            log.seek(-2, os.SEEK_END)
+            
+            while log.read(1) != b"\n":
+                log.seek(-2, os.SEEK_CUR)
+            
+            return log.readline().decode().strip()
+            
 
+    except (OSError, IndexError):
+        return ""
+    
 def current_log_name():
     current_date = date.today()
     log_name = f'mmx_harvester_{current_date.year}_{current_date.month:02}_{current_date.day:02}.txt'
