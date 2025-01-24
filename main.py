@@ -31,9 +31,11 @@ def is_node_host_up(host):
     result = subprocess.run(['ping', '-c', '1', host], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if result.returncode == 0:
         notification(f"{host} is up")
+        return True
     else:
         notification(f"{host} is down")
-        mmx_switch()
+        return False
+    
 
         
 def main():
@@ -44,7 +46,11 @@ def main():
         line = last_line_of_log(log_file_path)
         if 'WARN:' in line:
             notification(line)
-            is_node_host_up(os.getenv('NODE_HOST'))
+            if not is_node_host_up(os.getenv('NODE_HOST')):
+                mmx_switch('turn_off')
+                time.sleep(3)
+                mmx_switch('turn_on')
+                time.sleep(360)
         time.sleep(10)
     
 
