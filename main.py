@@ -28,7 +28,8 @@ def is_node_host_up(host):
 def main():
     while True:
         log_file = current_log_name()
-        line = last_line_of_log(f'{os.getenv('LOG_DIR')}{log_file}')
+        log_directory = os.getenv('LOG_DIR')
+        line = last_line_of_log(f'{log_directory}{log_file}')
         if 'WARN:' in line:
             notification(line)
             is_node_host_up(os.getenv('NODE_HOST'))
