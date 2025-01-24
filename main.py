@@ -32,7 +32,7 @@ def main():
         if 'WARN:' in line:
             print(line)
             notification(line)
-            print(f'node = {os.getenv('NODE_HOST')}')
+            print(f"node = {os.getenv('NODE_HOST')}")
             is_node_host_up(os.getenv('NODE_HOST'))
         time.sleep(10)
     
