@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-async def tele(message):
+async def send_message(message):
 
     try:
         botbotconsole_bot = Bot(token=os.getenv('BOT_TOKEN'))
@@ -15,5 +15,5 @@ async def tele(message):
         print(e)
 
 def notification(message):
-    asyncio.run(tele(message))
+    asyncio.run(send_message(message))
 
