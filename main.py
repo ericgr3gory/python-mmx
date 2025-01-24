@@ -1,7 +1,7 @@
 import time
 from datetime import date
 from notify import notification
-from ping3 import ping
+import subprocess
 from dotenv import load_dotenv
 import os
 
@@ -18,11 +18,12 @@ def current_log_name():
     return log_name
 
 def is_node_host_up(host):
-    response = ping(host, udp=True)
-    if response:   
-        notification(f'{host} is up')     
+    result = subprocess.run(['ping', '-c', '1', host], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if result.returncode == 0:
+        notification(f"{host} is up")
     else:
-        notification(f'{host} is down')
+        notification(f"{host} is down")
+
         
 def main():
     while True:
