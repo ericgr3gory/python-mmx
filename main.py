@@ -4,6 +4,7 @@ from notify import notification
 import subprocess
 from dotenv import load_dotenv
 import os
+from home_assisstant import mmx_switch
 
 
 
@@ -32,6 +33,7 @@ def is_node_host_up(host):
         notification(f"{host} is up")
     else:
         notification(f"{host} is down")
+        mmx_switch()
 
         
 def main():
