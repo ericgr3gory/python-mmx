@@ -19,7 +19,7 @@ def mmx_switch(action):
     }
     try:
         response = requests.post(f"{HA_URL}/api/services/switch/{action}", headers=headers, json=data)
-
+        print(response)
         if response.status_code == 200:
             return True
         
