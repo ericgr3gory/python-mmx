@@ -1,11 +1,17 @@
 import time
 from datetime import date
-from notify import notification
-import subprocess
-from dotenv import load_dotenv
-import os
-from home_assisstant import mmx_switch
 import logging
+import os
+import subprocess
+
+from dotenv import load_dotenv
+from home_assisstant import mmx_switch
+from notify import notification
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+load_dotenv()
+NODE_HOST = os.getenv('NODE_HOST')
 
 def last_line_of_log(filename):
     try:
@@ -36,31 +42,54 @@ def is_node_host_up(host):
         return False
     
 def powercycle_node_host():
-    logger.info("attempting to powercycle in 45 seconds")
-    notification("attempting to powercycle in 45 seconds")
+    
+    message = "attempting to powercycle in 45 seconds"
+    logger.info(message)
+    notification(message)
     time.sleep(45)
+    
     if mmx_switch('turn_off'):
-        logger.info('mmx_switch off')
+        
+        message = ('mmx_switch truned off')
+        logger.info(message)
+        notification(message)
         time.sleep(3)
+        
         if mmx_switch('turn_on'):
-            logger.info('mmx_switch on')
+            
+            message = "mmx_switch is turned on"
+            logger.info(message)
+            notification(message)
+            
             timeout = 360 
             interval = 45 
             start_time = time.time()
-            logger.info('confirming host is up............')
+            
+            message = "confirming host is up............"
+            logger.info(message)
+            notification(message)
+            
             while not is_node_host_up(NODE_HOST):
+                
                 if time.time() - start_time > timeout:
-                    logger.info("Timeout: Node host did not come up within the expected time.")
+                    message = "Timeout: Node host did not come up within the expected time."
+                    logger.info(message)
+                    notification(message)
                     return False
+                
                 time.sleep(interval)
-            logger.info(f"powercycle success {NODE_HOST} is up")
-            notification(f"powercycle success {NODE_HOST} is up")
-            # delay to allow node and farmer to restart on node host
+            message = f"powercycle success {NODE_HOST} is up waiting 2 minutes for mmx node to restart"
+            logger.info(message)
+            notification(message)
             time.sleep(120)
             return True
-    logger.info("mmx_node switch failed to turn on or off")
-    notification("mmx_node switch failed to on or turn off")
-    return False
+    
+    else:    
+        message =  "mmx_node switch failed to turn on or off"   
+        logger.info(message)
+        notification(message)
+    
+        return False
         
 def main():
     mmx_log_directory = os.getenv('LOG_DIR')
@@ -78,10 +107,6 @@ def main():
     
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-    logger = logging.getLogger(__name__)
-    load_dotenv()
-    NODE_HOST = os.getenv('NODE_HOST')
     main() 
 
   
