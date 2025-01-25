@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 import os
 import requests
+from requests.exceptions import RequestException
 
 ENTITY_ID = os.getenv('ENTITY_ID')
 HA_URL = os.getenv('HA_URL')
@@ -16,11 +17,16 @@ def mmx_switch(action):
     data = {
         "entity_id": ENTITY_ID
     }
+    try:
+        response = requests.post(f"{HA_URL}/api/services/switch/{action}", headers=headers, json=data)
 
-    response = requests.post(f"{HA_URL}/api/services/switch/{action}", headers=headers, json=data)
-
-    if response.status_code == 200:
-        return True
+        if response.status_code == 200:
+            return True
         
-    else:
+        else:
+            return False
+    
+    except RequestException as e:
+        
+        print(f"Error calling mmx_switch: {e}")
         return False
