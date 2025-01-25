@@ -105,7 +105,7 @@ def main():
             if not is_node_host_up(NODE_HOST):
                 powercycle_node_host()
         else:
-            logger.info('we are farmers ba db bab bab ...\n',line)
+            logger.info(f'we are farmers ba db bab bab ...\n{line}')
         
         time.sleep(10)
     
