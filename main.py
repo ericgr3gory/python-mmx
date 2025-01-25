@@ -98,11 +98,15 @@ def main():
         mmx_log_file = current_log_name()
         mmx_log_file_path = os.path.join(mmx_log_directory, mmx_log_file)
         line = last_line_of_log(mmx_log_file_path)
+        
         if 'WARN:' in line:
             notification(line)
             logger.info(line)
             if not is_node_host_up(NODE_HOST):
                 powercycle_node_host()
+        else:
+            logger.info('we are farmers ba db bab bab ...\n',line)
+        
         time.sleep(10)
     
 
